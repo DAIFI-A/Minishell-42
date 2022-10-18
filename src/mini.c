@@ -12,7 +12,7 @@
 
 #include "../mini.h"
 
-global	var;
+struct VAR	var;
 
 void	ft_sighandler(int sig)
 {

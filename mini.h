@@ -27,7 +27,7 @@
 # include <readline/readline.h>
 # include "libft/libft.h"
 
-extern struct global
+extern struct VAR
 {
 	int		id;
 	pid_t	cpid;
@@ -35,7 +35,7 @@ extern struct global
 	char	*usr;
 } var;
 
-extern struct global var;
+extern struct VAR var;
 
 typedef struct fds
 {
