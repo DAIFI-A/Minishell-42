@@ -12,6 +12,8 @@
 
 #include "../mini.h"
 
+global	var;
+
 void	ft_sighandler(int sig)
 {
 	if (sig == 2 && var.id == 0)

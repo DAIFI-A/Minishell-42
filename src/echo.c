@@ -9,9 +9,9 @@
 /*   Updated: 2022/08/24 20:30:00 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+/// echo -nnn -nnn -nnnb hello =>problem 
 
 #include"../mini.h"
-
 void	echo(t_lexer *arg)
 {
 	char	**s;

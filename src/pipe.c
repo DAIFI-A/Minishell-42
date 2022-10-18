@@ -14,7 +14,6 @@
 
 char	*redirection_handler(t_lexer **arg, t_fds *fds, char *str)
 {
-	fds->flag = 0;
 	while ((*arg) && (ft_strcmp((*arg)->content, "|")
 			|| (*arg)->ch == '"' || (*arg)->ch == '\''))
 	{
@@ -29,8 +28,6 @@ char	*redirection_handler(t_lexer **arg, t_fds *fds, char *str)
 		}
 		(*arg) = (*arg)->next;
 	}
-	if (str[0] != '\0' && fds->flag == 1)
-		str = ft_strjoin(str, "tmp");
 	return (str);
 }
 
@@ -47,9 +44,9 @@ void	content_handler(t_lexer **arg, t_env **env, t_fds *fds)
 	str = ft_strdup("");
 	tmp_in = dup(0);
 	tmp_out = dup(1);
-	str = redirection_handler(arg, fds, str);
-	if (str[0] == '\0' && fds->flag == 1)
-		return ;
+	str = redirection_handler(arg, fds, str); // => cmd output will be dup to the outfile 
+	//if (str[0] == '\0' && fds->flag == 1)
+	//	return ;
 	if (*str == '\0')
 		return (printf("command not found\n"), var.exit_status = 127, free(str));
 	dup2(tmp_in, STDIN_FILENO);
@@ -60,6 +57,8 @@ void	content_handler(t_lexer **arg, t_env **env, t_fds *fds)
 	free(str);
 	unlink("tmp");
 }
+
+// => merge this function with the previouse
 
 void	execute_redir(t_lexer *arg, t_env **env, t_fds *fds, char *str)
 {
@@ -84,6 +83,8 @@ void	execute_redir(t_lexer *arg, t_env **env, t_fds *fds, char *str)
 	dup2(tmp_out, STDOUT_FILENO);
 	close(tmp_in);
 	close(tmp_out);
+	close(fds->in);
+	close(fds->out);
 	ft_free_2d(cmd);
 }
 

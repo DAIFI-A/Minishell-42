@@ -10,6 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+
+
+// => SHLEVEL ENV must be update
 #include "../mini.h"
 
 void	ft_free_2d(char **ptr)

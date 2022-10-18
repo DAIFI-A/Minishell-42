@@ -48,7 +48,7 @@ void	builting(t_env **env, t_lexer *arg)
 	else if (!ft_strcmp(arg->content, "env"))
 		env_env(*env);
 	else if (!ft_strcmp(arg->content, "exit"))
-	{
+	{ // Overflow problem
 		if (!arg->next)
 			exit(var.exit_status);
 		else if (arg->next->next)

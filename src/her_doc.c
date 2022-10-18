@@ -17,7 +17,7 @@ int	her_doc(t_lexer *arg)
 	char	*s;
 	int		tmp;
 
-	tmp = open("tmp", O_RDWR | O_CREAT | O_TRUNC, 00777);
+	tmp = open("tmp/tmpfile", O_WRONLY | O_CREAT | O_TRUNC, 00646);
 	s = get_next_line(0);
 	arg->content = ft_strjoin(arg->content, "\n");
 	if (s == NULL || !ft_strcmp(s, arg->content))

@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+/// export a+=hello not supported yet;
+
 #include "../mini.h"
 
 void	export_env(t_env **env, t_lexer *arg)

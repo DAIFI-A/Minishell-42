@@ -16,7 +16,6 @@
 # include <sys/types.h>
 # include <signal.h>
 # include <sys/stat.h>
-# include <paths.h>
 # include <sys/wait.h>
 # include <sys/signal.h>
 # include <fcntl.h>
@@ -28,13 +27,15 @@
 # include <readline/readline.h>
 # include "libft/libft.h"
 
-struct s_global
+extern struct global
 {
 	int		id;
 	pid_t	cpid;
 	int		exit_status;
 	char	*usr;
 } var;
+
+extern struct global var;
 
 typedef struct fds
 {

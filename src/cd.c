@@ -10,6 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+
+/// SEG when we run cd test/test1 then rm -rf ../../test then cd ..
+/// => https://stackoverflow.com/questions/67251953/implement-cd-command-in-c#:~:text=%2D%20is%20a%20special%20argument%20for,directory%20in%20a%20global%20array.
+
 #include"../mini.h"
 
 void	cd_home(t_env *env)
@@ -51,7 +55,7 @@ void	cd(t_env *env, t_lexer *arg)
 	{
 		if (ft_multiple_check(arg->next->content) == 2)
 			break ;
-		if (chdir(arg->next->content))
+		if (chdir(arg->next->content) && getcwd(arg->next->content))
 		{
 			var.exit_status = 1;
 			return (ft_putendl_fd("No such file or directory", 2));

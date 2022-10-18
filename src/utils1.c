@@ -33,17 +33,22 @@ char	**env_str(t_env *env)
 
 void	input(t_lexer **arg, t_fds *fds)
 {
+	int		tmp;
+
 	close(fds->in);
 	if (!ft_strcmp((*arg)->content, "<<"))
 	{
 		(*arg) = (*arg)->next;
-		fds->in = her_doc(*arg);
-		fds->flag = 1;
+		tmp = dup(her_doc(*arg)); // => https://stackoverflow.com/questions/70672456/how-here-document-works-in-shell
+		close(her_doc(*arg));
+		dup2(tmp, 0);
+		close(tmp);
 	}
 	else
 	{
 		(*arg) = (*arg)->next;
 		fds->in = open((*arg)->content, O_RDWR, 0777);
+		close(fds->in);
 	}
 }
 
@@ -54,11 +59,13 @@ void	output(t_lexer **arg, t_fds *fds)
 	{
 		(*arg) = (*arg)->next;
 		fds->out = open((*arg)->content, O_APPEND | O_CREAT | O_WRONLY, 00777);
+		close(fds->out);
 	}
 	else
 	{
 		(*arg) = (*arg)->next;
 		fds->out = open((*arg)->content, O_CREAT | O_WRONLY | O_TRUNC, 00777);
+		close(fds->out);
 	}
 }
 
