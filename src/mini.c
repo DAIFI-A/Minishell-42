@@ -48,7 +48,7 @@ void	ft_handle(t_env *env)
 {
 	char	*rtn;
 	t_lexer	*lexer;
-	t_lexer	*top;
+	//t_lexer	*top;
 	t_fds	fd;
 	char	*stock;
 
@@ -63,7 +63,7 @@ void	ft_handle(t_env *env)
 			return (free(rtn), ft_control_d());
 		add_history(rtn);
 		ft_lexer(&lexer, rtn, &stock);
-		top = lexer;
+		//top = lexer;
 		ft_expand(&lexer, env);
 		ft_parser(&lexer);
 		check_cmd(&env, lexer, &fd);

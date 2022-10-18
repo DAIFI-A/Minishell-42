@@ -67,11 +67,11 @@ void	cd(t_env *env, t_lexer *arg)
 
 void	update_pwd(t_env **lst, char *home)
 {
-	char	*old_pwd;
+	//char	*old_pwd;
 	t_env	*env;
 
 	env = (*lst);
-	old_pwd = home;
+	//old_pwd = home;
 	while ((*lst))
 	{
 		if (!ft_strcmp((*lst)->key, "PWD"))
