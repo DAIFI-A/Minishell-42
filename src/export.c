@@ -58,6 +58,7 @@ void	set_env_existed(t_env **env, t_lexer *arg, t_env **lst)
 		}
 		if (!key || (ft_multiple_check(key) == 1 && ft_strcmp(key, "_")))
 			return (var.exit_status = 1, ft_putendl_fd("Error: export", 2));
+		//export_join();
 		if (!ft_strcmp(key, (*env)->key))
 		{
 			value = (*env)->value;

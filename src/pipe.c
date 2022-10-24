@@ -37,10 +37,10 @@ void	content_handler(t_lexer **arg, t_env **env, t_fds *fds)
 	t_lexer	*tmp;
 	int		tmp_in;
 	int		tmp_out;
-	int		i;
+//	int		i;
 
 	tmp = *arg;
-	i = 0;
+//	i = 0;
 	str = ft_strdup("");
 	tmp_in = dup(0);
 	tmp_out = dup(1);
@@ -53,9 +53,11 @@ void	content_handler(t_lexer **arg, t_env **env, t_fds *fds)
 	dup2(tmp_out, STDOUT_FILENO);
 	close(tmp_in);
 	close(tmp_out);
+//	close(fds->in);
+//	close(fds->out);
 	execute_redir(tmp, env, fds, str);
 	free(str);
-	unlink("tmp");
+//	unlink("tmp");
 }
 
 // => merge this function with the previouse
@@ -83,8 +85,6 @@ void	execute_redir(t_lexer *arg, t_env **env, t_fds *fds, char *str)
 	dup2(tmp_out, STDOUT_FILENO);
 	close(tmp_in);
 	close(tmp_out);
-	close(fds->in);
-	close(fds->out);
 	ft_free_2d(cmd);
 }
 

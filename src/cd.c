@@ -55,7 +55,7 @@ void	cd(t_env *env, t_lexer *arg)
 	{
 		if (ft_multiple_check(arg->next->content) == 2)
 			break ;
-		if (chdir(arg->next->content) && getcwd(arg->next->content))
+		if (chdir(arg->next->content) && getcwd(arg->next->content, 1024))
 		{
 			var.exit_status = 1;
 			return (ft_putendl_fd("No such file or directory", 2));

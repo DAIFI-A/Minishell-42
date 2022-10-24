@@ -35,13 +35,15 @@ void	input(t_lexer **arg, t_fds *fds)
 {
 	int		tmp;
 
-	close(fds->in);
+	//close(fds->in);
 	if (!ft_strcmp((*arg)->content, "<<"))
 	{
 		(*arg) = (*arg)->next;
-		tmp = dup(her_doc(*arg)); // => https://stackoverflow.com/questions/70672456/how-here-document-works-in-shell
+		 // => https://stackoverflow.com/questions/70672456/how-here-document-works-in-shell
 		close(her_doc(*arg));
-		dup2(tmp, 0);
+		tmp = open("/tmp/tmpfile", O_RDONLY, 00777);
+		//unlink("/tmp/tmpfile");
+		dup2(tmp, fds->in);
 		close(tmp);
 	}
 	else

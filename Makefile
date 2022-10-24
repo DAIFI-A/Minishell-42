@@ -23,14 +23,14 @@ INC= mini.h
 all: $(NAME)
 
 $(NAME) : $(OBJ_DIR) $(OFILES) $(LIBFT)
-	@$(CC) $(OFILES) $(LIBFT) -L $(shell brew --prefix readline)/lib -lreadline -o $(NAME)
+	@$(CC) $(OFILES) $(LIBFT) -L readline/lib -lreadline -o $(NAME)
 	@echo "minishell ok"
 
 $(OBJ_DIR):
 	@mkdir obj
 
 $(OFILES): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(INC)
-	@$(CC) -c $(CFLAGS) -I $(shell brew --prefix readline)/include -c $< -o $@
+	@$(CC) -c $(CFLAGS) -I readline/include -c $< -o $@
 
 $(LIBFT): force
 	@make -C libft

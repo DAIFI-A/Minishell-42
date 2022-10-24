@@ -15,24 +15,26 @@
 int	her_doc(t_lexer *arg)
 {
 	char	*s;
-	int		tmp;
+	int	file;
+	int	tmp;
 
-	tmp = open("tmp/tmpfile", O_WRONLY | O_CREAT | O_TRUNC, 00646);
-	s = get_next_line(0);
-	arg->content = ft_strjoin(arg->content, "\n");
+	file = open("/tmp/tmpfile", O_WRONLY | O_CREAT | O_TRUNC, 00777);
+	tmp = dup(file);
+	s = readline(">");
+	//arg->content = ft_strjoin(arg->content, "\n");
 	if (s == NULL || !ft_strcmp(s, arg->content))
-		return (free(s), tmp);
+		return (free(s), file);
 	write(tmp, s, ft_strlen(s));
 	while (ft_strcmp(s, arg->content))
 	{
-		s = get_next_line(0);
+		s = readline(">");
 		if (s == NULL || !ft_strcmp(s, arg->content))
 		{
 			free(s);
-			return (tmp);
+			return (file);
 		}
 		write(tmp, s, ft_strlen(s));
 	}
 	free(s);
-	return (tmp);
+	return (file);
 }

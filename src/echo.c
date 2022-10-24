@@ -23,16 +23,16 @@ void	echo(t_lexer *arg)
 		return (ft_putendl_fd("", 1));
 	s = join_echo(&arg);
 	k = check_newline(s);
-	if (k != 0)
+	i = k;
+	if (i > 0)
 	{
-		i = k;
 		while (s[i])
 		{
-			printf("%s ", s[i]);
+			ft_putendl_fd(s[i], 1);
 			i++;
 		}
 	}
-	else
+	if (k == 0)
 		echo_newline(s);
 	ft_free_2d(s);
 }
@@ -82,10 +82,13 @@ int	check_newline(char **str)
 	j = 1;
 	while (str[i])
 	{
-		if (str[i][0] == '-' && str[i][j] == 'n')
-			k++;
+		while (str[i][0] == '-' && str[i][j] == 'n')
+		{
+			j++;
+			if (!str[i][j])
+				k += 1;
+		}
 		i++;
-		j++;
 	}
 	return (k);
 }
