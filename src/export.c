@@ -6,11 +6,9 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:00:32 by adaifi            #+#    #+#             */
-/*   Updated: 2022/08/25 19:12:08 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/24 14:16:14 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-/// export a+=hello not supported yet;
 
 #include "../mini.h"
 
@@ -47,9 +45,11 @@ void	set_env_existed(t_env **env, t_lexer *arg, t_env **lst)
 {
 	char	*key;
 	char	*value;
+	char	*s;
 
 	while ((*env) && arg->next)
 	{
+		s = ft_strchr(arg->next->content, '+') + 1;
 		key = get_keys(arg->next->content, '=');
 		if (ft_multiple_check(key) == 2)
 		{
@@ -58,8 +58,14 @@ void	set_env_existed(t_env **env, t_lexer *arg, t_env **lst)
 		}
 		if (!key || (ft_multiple_check(key) == 1 && ft_strcmp(key, "_")))
 			return (var.exit_status = 1, ft_putendl_fd("Error: export", 2));
-		//export_join();
-		if (!ft_strcmp(key, (*env)->key))
+		if (!ft_strcmp(key, (*env)->key) && s[0] == '+')
+		{
+			value = (*env)->value;
+			(*env)->value = ft_strjoin((*env)->value, ft_strchr(arg->next->content, '+') + 2);
+			*env = *lst;
+			break ;
+		}
+		else if (!ft_strcmp(key, (*env)->key))
 		{
 			value = (*env)->value;
 			free(value);

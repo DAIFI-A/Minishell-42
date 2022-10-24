@@ -6,10 +6,10 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:06:02 by adaifi            #+#    #+#             */
-/*   Updated: 2022/08/24 20:30:00 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/24 12:22:46 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-/// echo -nnn -nnn -nnnb hello =>problem 
+
 
 #include"../mini.h"
 void	echo(t_lexer *arg)
@@ -28,7 +28,8 @@ void	echo(t_lexer *arg)
 	{
 		while (s[i])
 		{
-			ft_putendl_fd(s[i], 1);
+			ft_putstr_fd(s[i], 1);
+			ft_putchar_fd(' ', 1);
 			i++;
 		}
 	}

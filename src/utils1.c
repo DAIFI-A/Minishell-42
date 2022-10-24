@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 21:17:24 by adaifi            #+#    #+#             */
-/*   Updated: 2022/08/23 21:46:23 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/24 19:44:44 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,13 @@ void	input(t_lexer **arg, t_fds *fds)
 {
 	int		tmp;
 
-	//close(fds->in);
 	if (!ft_strcmp((*arg)->content, "<<"))
 	{
 		(*arg) = (*arg)->next;
 		 // => https://stackoverflow.com/questions/70672456/how-here-document-works-in-shell
 		close(her_doc(*arg));
 		tmp = open("/tmp/tmpfile", O_RDONLY, 00777);
-		//unlink("/tmp/tmpfile");
+		unlink("/tmp/tmpfile");
 		dup2(tmp, fds->in);
 		close(tmp);
 	}
@@ -74,10 +73,15 @@ void	output(t_lexer **arg, t_fds *fds)
 void	pipe_handler(t_fds *fds, t_lexer *arg, t_env *env, int i)
 {
 	int		j;
+	int		stat;
 
+	stat = 0;
 	j = -1;
 	while (arg && ++j < i)
 	{
+		var.cpid = fork();
+		if (var.cpid < 0)
+			return (printf("fork error"), var.exit_status = 1, (void)arg);
 		if (j == 0)
 		{
 			fds->in = dup(0);
@@ -98,4 +102,6 @@ void	pipe_handler(t_fds *fds, t_lexer *arg, t_env *env, int i)
 			arg = arg->next;
 		close(fds->fd[(j * 2) + 1]);
 	}
+	wait(&stat);
+	var.exit_status = WEXITSTATUS(stat);
 }

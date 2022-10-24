@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 19:38:47 by adaifi            #+#    #+#             */
-/*   Updated: 2022/08/28 22:58:36 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/24 19:44:34 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,12 @@ void	content_handler(t_lexer **arg, t_env **env, t_fds *fds)
 	t_lexer	*tmp;
 	int		tmp_in;
 	int		tmp_out;
-//	int		i;
 
 	tmp = *arg;
-//	i = 0;
 	str = ft_strdup("");
 	tmp_in = dup(0);
 	tmp_out = dup(1);
-	str = redirection_handler(arg, fds, str); // => cmd output will be dup to the outfile 
+	str = redirection_handler(arg, fds, str);
 	//if (str[0] == '\0' && fds->flag == 1)
 	//	return ;
 	if (*str == '\0')
@@ -53,11 +51,8 @@ void	content_handler(t_lexer **arg, t_env **env, t_fds *fds)
 	dup2(tmp_out, STDOUT_FILENO);
 	close(tmp_in);
 	close(tmp_out);
-//	close(fds->in);
-//	close(fds->out);
 	execute_redir(tmp, env, fds, str);
 	free(str);
-//	unlink("tmp");
 }
 
 // => merge this function with the previouse
@@ -91,12 +86,7 @@ void	execute_redir(t_lexer *arg, t_env **env, t_fds *fds, char *str)
 void	execute(char **cmd, t_env **env)
 {
 	char	**envp;
-	int		stat;
 
-	stat = 0;
-	var.cpid = fork();
-	if (var.cpid < 0)
-		return (printf("fork error"), var.exit_status = 1, ft_free_2d(cmd));
 	var.id = 1;
 	if (var.cpid == 0)
 	{
@@ -110,8 +100,6 @@ void	execute(char **cmd, t_env **env)
 		}
 		ft_free_2d(envp);
 	}
-	wait(&stat);
-	var.exit_status = WEXITSTATUS(stat);
 }
 
 void	execute_pipe(t_env *env, t_lexer *arg, t_fds *fds, int i)
@@ -124,6 +112,7 @@ void	execute_pipe(t_env *env, t_lexer *arg, t_fds *fds, int i)
 	fds->fd = (int *)malloc((i * 2) * sizeof(int));
 	tmp_in = dup(0);
 	tmp_out = dup(1);
+
 	while (j < i * 2)
 	{
 		pipe(fds->fd + j);

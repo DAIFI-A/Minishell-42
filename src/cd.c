@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 16:55:52 by adaifi            #+#    #+#             */
-/*   Updated: 2022/08/26 20:20:37 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/24 19:29:33 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,29 +67,28 @@ void	cd(t_env *env, t_lexer *arg)
 
 void	update_pwd(t_env **lst, char *home)
 {
-	//char	*old_pwd;
 	t_env	*env;
+	char	pwd[1024];
+	t_env	*node;
 
 	env = (*lst);
-	//old_pwd = home;
+	node = *lst;
 	while ((*lst))
 	{
 		if (!ft_strcmp((*lst)->key, "PWD"))
-		{
 			getcwd((*lst)->value, 1024);
-			break ;
-		}
-		(*lst) = (*lst)->next;
-	}
-	*lst = env;
-	while ((*lst))
-	{
-		if (!ft_strcmp((*lst)->key, "OLDPWD"))
+		else if (!ft_strcmp((*lst)->key, "OLDPWD"))
 		{
-			free((*lst)->value);
 			(*lst)->value = ft_strdup(home);
 			break ;
 		}
 		(*lst) = (*lst)->next;
+	}
+	if (!(*lst))
+	{
+		node = ft_lst_new1("PWD", getcwd(pwd, 1024));
+		ft_lstadd_back_prime(&env, node);
+		node = ft_lst_new1("OLDPWD", home);
+		ft_lstadd_back_prime(&env, node);
 	}
 }
