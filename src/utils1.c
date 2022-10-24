@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 21:17:24 by adaifi            #+#    #+#             */
-/*   Updated: 2022/10/24 19:44:44 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/24 21:09:07 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ void	input(t_lexer **arg, t_fds *fds)
 	}
 	else
 	{
+		close(fds->in);
 		(*arg) = (*arg)->next;
 		fds->in = open((*arg)->content, O_RDWR, 0777);
-		close(fds->in);
 	}
 }
 
@@ -60,13 +60,11 @@ void	output(t_lexer **arg, t_fds *fds)
 	{
 		(*arg) = (*arg)->next;
 		fds->out = open((*arg)->content, O_APPEND | O_CREAT | O_WRONLY, 00777);
-		close(fds->out);
 	}
 	else
 	{
 		(*arg) = (*arg)->next;
 		fds->out = open((*arg)->content, O_CREAT | O_WRONLY | O_TRUNC, 00777);
-		close(fds->out);
 	}
 }
 
@@ -81,7 +79,7 @@ void	pipe_handler(t_fds *fds, t_lexer *arg, t_env *env, int i)
 	{
 		var.cpid = fork();
 		if (var.cpid < 0)
-			return (printf("fork error"), var.exit_status = 1, (void)arg);
+			return (var.exit_status = 1, ft_putendl_fd("fork error", 2));
 		if (j == 0)
 		{
 			fds->in = dup(0);

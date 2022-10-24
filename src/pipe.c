@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 19:38:47 by adaifi            #+#    #+#             */
-/*   Updated: 2022/10/24 19:44:34 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/24 21:06:26 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,9 @@ void	execute_redir(t_lexer *arg, t_env **env, t_fds *fds, char *str)
 void	execute(char **cmd, t_env **env)
 {
 	char	**envp;
+	int		stat;
 
+	stat = 0;
 	var.id = 1;
 	if (var.cpid == 0)
 	{
@@ -100,6 +102,7 @@ void	execute(char **cmd, t_env **env)
 		}
 		ft_free_2d(envp);
 	}
+	wait(&stat);
 }
 
 void	execute_pipe(t_env *env, t_lexer *arg, t_fds *fds, int i)

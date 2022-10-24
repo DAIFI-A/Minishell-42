@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_handler.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: med-doba <med-doba@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 14:32:48 by adaifi            #+#    #+#             */
-/*   Updated: 2022/08/18 09:21:19 by med-doba         ###   ########.fr       */
+/*   Updated: 2022/10/24 21:00:10 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,9 @@ void	check_cmd(t_env **env, t_lexer *arg, t_fds *fds)
 	{
 		fds->in = dup(STDIN_FILENO);
 		fds->out = dup(STDOUT_FILENO);
+		var.cpid = fork();
 		content_handler(&arg, env, fds);
+		var.exit_status = WEXITSTATUS(stat);
 	}
 	else
 		execute_pipe(*env, arg, fds, i);
