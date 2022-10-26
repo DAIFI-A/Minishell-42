@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 14:32:48 by adaifi            #+#    #+#             */
-/*   Updated: 2022/10/24 21:00:10 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/25 13:35:18 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,27 +60,26 @@ void	builting(t_env **env, t_lexer *arg)
 
 void	check_cmd(t_env **env, t_lexer *arg, t_fds *fds)
 {
-	int		i;
 	t_lexer	*tmp;
+	int		stat;
 
-	i = 0;
+	stat = 0;
+	var.i = 0;
 	if (!arg)
 		return ;
 	tmp = arg;
 	while (tmp)
 	{
 		if (!ft_strcmp(tmp->content, "|") && tmp->ch != '"' && tmp->ch != '\'')
-			i++;
+			var.i++;
 		tmp = tmp->next;
 	}
-	if (i == 0)
+	if (var.i == 0)
 	{
 		fds->in = dup(STDIN_FILENO);
 		fds->out = dup(STDOUT_FILENO);
-		var.cpid = fork();
 		content_handler(&arg, env, fds);
-		var.exit_status = WEXITSTATUS(stat);
 	}
 	else
-		execute_pipe(*env, arg, fds, i);
+		execute_pipe(*env, arg, fds, var.i);
 }

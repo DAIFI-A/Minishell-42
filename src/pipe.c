@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 19:38:47 by adaifi            #+#    #+#             */
-/*   Updated: 2022/10/24 21:06:26 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/26 12:58:02 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ void	content_handler(t_lexer **arg, t_env **env, t_fds *fds)
 	tmp_in = dup(0);
 	tmp_out = dup(1);
 	str = redirection_handler(arg, fds, str);
-	//if (str[0] == '\0' && fds->flag == 1)
-	//	return ;
 	if (*str == '\0')
 		return (printf("command not found\n"), var.exit_status = 127, free(str));
 	dup2(tmp_in, STDIN_FILENO);
@@ -55,8 +53,6 @@ void	content_handler(t_lexer **arg, t_env **env, t_fds *fds)
 	free(str);
 }
 
-// => merge this function with the previouse
-
 void	execute_redir(t_lexer *arg, t_env **env, t_fds *fds, char *str)
 {
 	char	**cmd;
@@ -64,7 +60,7 @@ void	execute_redir(t_lexer *arg, t_env **env, t_fds *fds, char *str)
 	int		tmp_out;
 
 	if (fds->in < 0 || fds->out < 0)
-		return (var.exit_status = 1, ft_putendl_fd("fd rerror", 2));
+		return (var.exit_status = 1, ft_putendl_fd("fd e5rror", 2));
 	cmd = ft_split(str, ' ');
 	tmp_in = dup(0);
 	tmp_out = dup(1);
@@ -74,8 +70,10 @@ void	execute_redir(t_lexer *arg, t_env **env, t_fds *fds, char *str)
 	close(fds->out);
 	if (check_type(cmd[0]))
 		builting(env, arg);
+	else if (var.i == 0)
+		execute_one_cmd(cmd, env);
 	else
-		execute(cmd, env);
+		execute(cmd, env, fds);
 	dup2(tmp_in, STDIN_FILENO);
 	dup2(tmp_out, STDOUT_FILENO);
 	close(tmp_in);
@@ -83,13 +81,40 @@ void	execute_redir(t_lexer *arg, t_env **env, t_fds *fds, char *str)
 	ft_free_2d(cmd);
 }
 
-void	execute(char **cmd, t_env **env)
+void	execute(char **cmd, t_env **env, t_fds 	*fds)
+{
+	char	**envp;
+	int		j;
+
+	j = -1;
+	var.id = 1;
+	var.cpid = fork();
+	if (var.cpid < 0)
+		return (var.exit_status = 1, ft_putendl_fd("fork error", 2));
+	if (var.cpid == 0)
+	{
+		while (++j < var.i)
+			close(fds->fd[j]);
+		envp = env_str(*env);
+		if (execve(get_path(cmd[0], env), cmd, envp) == -1
+			|| check_upper(cmd[0]) || !get_path(cmd[0], env))
+		{
+			ft_free_2d(envp);
+			ft_free_2d(cmd);
+			return (ft_putendl_fd("command not found", 2), exit(127));
+		}
+		ft_free_2d(envp);
+	}
+}
+
+void	execute_one_cmd(char **cmd, t_env **env)
 {
 	char	**envp;
 	int		stat;
 
-	stat = 0;
 	var.id = 1;
+	stat = 0;
+	var.cpid = fork();
 	if (var.cpid == 0)
 	{
 		envp = env_str(*env);
@@ -103,6 +128,7 @@ void	execute(char **cmd, t_env **env)
 		ft_free_2d(envp);
 	}
 	wait(&stat);
+	var.exit_status = WEXITSTATUS(stat);
 }
 
 void	execute_pipe(t_env *env, t_lexer *arg, t_fds *fds, int i)
@@ -115,7 +141,6 @@ void	execute_pipe(t_env *env, t_lexer *arg, t_fds *fds, int i)
 	fds->fd = (int *)malloc((i * 2) * sizeof(int));
 	tmp_in = dup(0);
 	tmp_out = dup(1);
-
 	while (j < i * 2)
 	{
 		pipe(fds->fd + j);
@@ -123,9 +148,9 @@ void	execute_pipe(t_env *env, t_lexer *arg, t_fds *fds, int i)
 	}
 	i = i + 1;
 	pipe_handler(fds, arg, env, i);
-	j = -1;
-	while (++j < i + 1)
-		close(fds->fd[(j - 1) * 2]);
+	j = 0;
+	while (++j <= i)
+		close(fds->fd[j - 1]);
 	dup2(tmp_in, STDIN_FILENO);
 	dup2(tmp_out, STDOUT_FILENO);
 	close(tmp_in);

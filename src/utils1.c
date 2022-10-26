@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 21:17:24 by adaifi            #+#    #+#             */
-/*   Updated: 2022/10/24 21:09:07 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/26 12:50:29 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,6 @@ void	pipe_handler(t_fds *fds, t_lexer *arg, t_env *env, int i)
 	j = -1;
 	while (arg && ++j < i)
 	{
-		var.cpid = fork();
-		if (var.cpid < 0)
-			return (var.exit_status = 1, ft_putendl_fd("fork error", 2));
 		if (j == 0)
 		{
 			fds->in = dup(0);
@@ -100,6 +97,8 @@ void	pipe_handler(t_fds *fds, t_lexer *arg, t_env *env, int i)
 			arg = arg->next;
 		close(fds->fd[(j * 2) + 1]);
 	}
-	wait(&stat);
+	waitpid(var.cpid, &stat, 0);
+	while (--i)
+		wait(&stat);
 	var.exit_status = WEXITSTATUS(stat);
 }

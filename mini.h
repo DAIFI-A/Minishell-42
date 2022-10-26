@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:19:50 by med-doba          #+#    #+#             */
-/*   Updated: 2022/08/28 22:51:13 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/25 14:07:10 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ extern struct VAR
 	pid_t	cpid;
 	int		exit_status;
 	char	*usr;
+	int		i;
 } var;
 
 extern struct VAR var;
@@ -117,6 +118,7 @@ void	cd_home(t_env *env);
 int		check_type(char *arg);
 void	builting(t_env **env, t_lexer *arg);
 void	one_cmd(t_env **env, t_lexer *arg, char **envp, char *str);
+void	execute_one_cmd(char **cmd, t_env **env);
 void	check_cmd(t_env **env, t_lexer *arg, t_fds *fd);
 void	pwd_env(void);
 char	*get_path(char *cmd, t_env **env);
@@ -144,7 +146,7 @@ void	execute_redir(t_lexer *arg, t_env **env, t_fds *fds, char *str);
 char	*redirection_handler(t_lexer **arg, t_fds *fds, char *str);
 void	input(t_lexer **arg, t_fds *fds);
 void	output(t_lexer **arg, t_fds *fds);
-void	execute(char **cmd, t_env **env);
+void	execute(char **cmd, t_env **env, t_fds 	*fds);
 int		her_doc(t_lexer *arg);
 char	*get_next_line(int fd);
 void	update_pwd(t_env **lst, char *home);
