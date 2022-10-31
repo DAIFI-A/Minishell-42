@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 19:38:47 by adaifi            #+#    #+#             */
-/*   Updated: 2022/10/26 12:58:02 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/28 00:51:47 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,10 @@ void	content_handler(t_lexer **arg, t_env **env, t_fds *fds)
 	tmp_out = dup(1);
 	str = redirection_handler(arg, fds, str);
 	if (*str == '\0')
+	{
+		puts("h");
 		return (printf("command not found\n"), var.exit_status = 127, free(str));
+	}
 	dup2(tmp_in, STDIN_FILENO);
 	dup2(tmp_out, STDOUT_FILENO);
 	close(tmp_in);
@@ -86,15 +89,18 @@ void	execute(char **cmd, t_env **env, t_fds 	*fds)
 	char	**envp;
 	int		j;
 
-	j = -1;
+	j = 0;
 	var.id = 1;
 	var.cpid = fork();
 	if (var.cpid < 0)
 		return (var.exit_status = 1, ft_putendl_fd("fork error", 2));
 	if (var.cpid == 0)
 	{
-		while (++j < var.i)
+		while (j <= var.i)
+		{
 			close(fds->fd[j]);
+			j++;
+		}
 		envp = env_str(*env);
 		if (execve(get_path(cmd[0], env), cmd, envp) == -1
 			|| check_upper(cmd[0]) || !get_path(cmd[0], env))
@@ -148,9 +154,6 @@ void	execute_pipe(t_env *env, t_lexer *arg, t_fds *fds, int i)
 	}
 	i = i + 1;
 	pipe_handler(fds, arg, env, i);
-	j = 0;
-	while (++j <= i)
-		close(fds->fd[j - 1]);
 	dup2(tmp_in, STDIN_FILENO);
 	dup2(tmp_out, STDOUT_FILENO);
 	close(tmp_in);

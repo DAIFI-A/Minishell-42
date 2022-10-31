@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/25 14:30:18 by adaifi            #+#    #+#             */
-/*   Updated: 2022/10/24 14:15:58 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/31 17:54:05 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,12 @@ int	ft_multiple_check(char *arg)
 {
 	int		i;
 
-	i = 0;
+	i = 1;
 	while (arg[i])
 	{
-		if (arg[0] == '>' || arg[0] == '|' || arg[0] == '<')
+		if ((arg[0] == '>' || arg[0] == '|' || arg[0] == '<'))
 			return (2);
-		if (!ft_isalpha(arg[i]) || arg[i] == ' ')
+		if (!ft_isalpha(arg[0]) || arg[i] == ' ')
 			return (1);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:06:02 by adaifi            #+#    #+#             */
-/*   Updated: 2022/10/24 12:22:46 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/31 18:08:20 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,13 @@ char	**join_echo(t_lexer **arg)
 	char	**s;
 
 	output = ft_strdup("");
-	while ((*arg)->next && ft_multiple_check((*arg)->next->content) != 2)
+	while ((*arg)->next)
 	{
+		if (!ft_strcmp((*arg)->next->content, "|"))
+		{
+			s = ft_split(output, ' ');
+			return (s);
+		}
 		output = ft_strjoin(output, (*arg)->next->content);
 		output = ft_strjoin(output, " ");
 		(*arg) = (*arg)->next;

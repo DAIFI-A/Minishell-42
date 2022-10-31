@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 16:55:52 by adaifi            #+#    #+#             */
-/*   Updated: 2022/10/24 19:29:33 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/26 17:21:17 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	cd_home(t_env *env)
 		}
 		env = env->next;
 	}
-	if (!home)
+	if (!home && !env)
 		return (var.exit_status = 1, ft_putendl_fd("Home not set", 2));
 	else
 		chdir(home);
@@ -55,7 +55,7 @@ void	cd(t_env *env, t_lexer *arg)
 	{
 		if (ft_multiple_check(arg->next->content) == 2)
 			break ;
-		if (chdir(arg->next->content) && getcwd(arg->next->content, 1024))
+		if (chdir(arg->next->content))
 		{
 			var.exit_status = 1;
 			return (ft_putendl_fd("No such file or directory", 2));
@@ -76,9 +76,14 @@ void	update_pwd(t_env **lst, char *home)
 	while ((*lst))
 	{
 		if (!ft_strcmp((*lst)->key, "PWD"))
-			getcwd((*lst)->value, 1024);
+		{
+			free((*lst)->value);
+			getcwd(pwd, 1024);
+			(*lst)->value = ft_strdup(pwd);
+		}
 		else if (!ft_strcmp((*lst)->key, "OLDPWD"))
 		{
+			free((*lst)->value);
 			(*lst)->value = ft_strdup(home);
 			break ;
 		}

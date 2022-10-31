@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 16:34:05 by med-doba          #+#    #+#             */
-/*   Updated: 2022/10/24 14:25:43 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/28 14:37:14 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	ft_handle(t_env *env)
 	{
 		lexer = NULL;
 		var.id = 0;
-		rtn = readline("MiniShell>$");
+		rtn = readline("Minishell>$");
 		var.usr = rtn;
 		if (rtn == NULL)
 			return (free(rtn), ft_control_d());

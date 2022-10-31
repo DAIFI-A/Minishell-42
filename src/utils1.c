@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 21:17:24 by adaifi            #+#    #+#             */
-/*   Updated: 2022/10/26 12:50:29 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/26 17:10:47 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,17 @@ void	pipe_handler(t_fds *fds, t_lexer *arg, t_env *env, int i)
 			arg = arg->next;
 		close(fds->fd[(j * 2) + 1]);
 	}
-	waitpid(var.cpid, &stat, 0);
-	while (--i)
-		wait(&stat);
+	j = 0;
+	while (j < i)
+	{
+		close(fds->fd[j]);
+		j++;
+	}
+	j = 0;
+	while(j <= i)
+	{
+		wait(NULL);
+		j++;
+	}
 	var.exit_status = WEXITSTATUS(stat);
 }

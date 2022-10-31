@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 14:32:48 by adaifi            #+#    #+#             */
-/*   Updated: 2022/10/25 13:35:18 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/31 00:45:01 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	builting(t_env **env, t_lexer *arg)
 	else if (!ft_strcmp(arg->content, "env"))
 		env_env(*env);
 	else if (!ft_strcmp(arg->content, "exit"))
-	{ // Overflow problem
+	{
 		if (!arg->next)
 			exit(var.exit_status);
 		else if (arg->next->next)

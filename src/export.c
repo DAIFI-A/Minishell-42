@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:00:32 by adaifi            #+#    #+#             */
-/*   Updated: 2022/10/24 14:16:14 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/30 18:49:27 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,35 +45,54 @@ void	set_env_existed(t_env **env, t_lexer *arg, t_env **lst)
 {
 	char	*key;
 	char	*value;
+	t_env	**tmp;
 	char	*s;
 
+	tmp = env;
 	while ((*env) && arg->next)
 	{
-		s = ft_strchr(arg->next->content, '+') + 1;
+		s = ft_strchr(arg->next->content, '+');
 		key = get_keys(arg->next->content, '=');
-		if (ft_multiple_check(key) == 2)
-		{
-			arg->flag = 1;
-			break ;
-		}
 		if (!key || (ft_multiple_check(key) == 1 && ft_strcmp(key, "_")))
 			return (var.exit_status = 1, ft_putendl_fd("Error: export", 2));
-		if (!ft_strcmp(key, (*env)->key) && s[0] == '+')
+		if (!s)
+			return ;
+		if (s[0] == '+')
 		{
-			value = (*env)->value;
-			(*env)->value = ft_strjoin((*env)->value, ft_strchr(arg->next->content, '+') + 2);
+			char *h = get_keys(arg->next->content, '+');
+			value = ft_strchr(arg->next->content, '+') + 2;
+			export_join(env, h, value);
 			*env = *lst;
-			break ;
+			return ;
 		}
-		else if (!ft_strcmp(key, (*env)->key))
+		(*env) =(*env)->next;
+	}
+	env = tmp;
+	while ((*env) && arg->next)
+	{
+		key = get_keys(arg->next->content, '=');
+		if (!ft_strcmp(key, (*env)->key))
 		{
 			value = (*env)->value;
 			free(value);
 			(*env)->value = ft_strdup(ft_strchr(arg->next->content, '=') + 1);
 			*env = *lst;
-			break ;
+			return ;
 		}
 		(*env) = (*env)->next;
+	}
+}
+
+void	export_join(t_env **env, char *key, char *value)
+{
+	while (*env)
+	{
+		if (!ft_strcmp(key, (*env)->key))
+		{
+			(*env)->value = ft_strjoin((*env)->value, value);
+			break ;
+		}
+		*env = (*env)->next;
 	}
 }
 

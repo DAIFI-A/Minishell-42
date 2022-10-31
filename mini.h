@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:19:50 by med-doba          #+#    #+#             */
-/*   Updated: 2022/10/25 14:07:10 by adaifi           ###   ########.fr       */
+/*   Updated: 2022/10/30 17:46:03 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ void	update_pwd(t_env **lst, char *home);
 int		ft_multiple_check(char *arg);
 void	ft_print_exported(t_env **env);
 void	ft_add_export(char *str, t_env **env);
+void	export_join(t_env **env, char *key, char *value);
 void	ft_sort_env(t_env **env);
 int		check_upper(char *str);
 #endif
